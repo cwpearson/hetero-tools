@@ -51,7 +51,7 @@ dependencies = [
 [[package]]
 name = "heteroprof"
 version = "0.1.0"
-source = "git+https://github.com/cwpearson/heteroprof-rs#b932936b854dfe206f92588891739e8e2688284b"
+source = "git+https://github.com/cwpearson/heteroprof-rs#91fb8d3437b5469fcd7e405f518dc954f009b1d5"
 dependencies = [
  "serde 1.0.33 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.33 (registry+https://github.com/rust-lang/crates.io-index)",
