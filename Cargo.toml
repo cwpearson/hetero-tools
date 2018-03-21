@@ -1,0 +1,8 @@
+[package]
+name = "hetero-tools"
+version = "0.1.0"
+authors = ["Carl Pearson <carl.w.pearson@gmail.com>"]
+
+[dependencies]
+heteroprof = { git = "https://github.com/cwpearson/heteroprof-rs", branch = "master" }
+clap = "2"
