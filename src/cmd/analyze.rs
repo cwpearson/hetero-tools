@@ -43,11 +43,13 @@ pub fn run(path: &str) {
     eprintln!("{}MB/s", sz as f64 / secs / 1024 as f64 / 1024 as f64);
 
     // sort computes
+    eprintln!("sorting compute intervals...");
     doc.computes_mut().sort_by(|a, b| -> Ordering {
         return a.cmp_start(b);
     });
 
     // sort transfers
+    eprintln!("sorting transfer intervals...");
     doc.transfers_mut().sort_by(|a, b| -> Ordering {
         return a.cmp_start(b);
     });
@@ -60,25 +62,34 @@ pub fn run(path: &str) {
     for t in doc.transfers() {
         // advance c until we're covered or it's past us
         let mut c = &doc.computes()[ci];
+        eprintln!("t=   {}-{}", t.lb(), t.ub());
 
         while ci < doc.computes().len() {
             c = &doc.computes()[ci];
-            eprintln!("c is to {}-{}", c.lb(), c.ub());
+            eprintln!("c is {}-{}", c.lb(), c.ub());
+
+            // check if c and t overlap
             if c.overlaps(t) {
-                eprintln!(
-                    "t={}-{} overlapped by c={}-{}",
-                    t.lb(),
-                    t.ub(),
-                    c.lb(),
-                    c.ub()
-                );
+                eprintln!("overlapped by c[{}]={}-{}", ci, c.lb(), c.ub());
+                if t.lb() < c.lb() {
+                    freet += c.lb() - t.lb();
+                    eprintln!("part below");
+                }
+                if t.ub() > c.ub() {
+                    freet += t.ub() - c.ub();
+                    eprintln!("part above");
+                }
                 break;
             }
+
+            // if c is past t, t is free
             if c.lb() >= t.ub() {
-                eprintln!("t={}-{} unblocked", t.lb(), t.ub());
+                eprintln!("unblocked");
                 freet += t.ub() - t.lb();
                 break;
             }
+
+            // increment c until it passes or overlaps t
             ci += 1;
         }
     }
