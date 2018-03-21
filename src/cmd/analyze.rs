@@ -3,6 +3,7 @@ extern crate heteroprof;
 use std::fs;
 use std::io::BufReader;
 use std::time::SystemTime;
+use std::cmp::Ordering;
 
 // use self::heteroprof::{decode_document, Document};
 
@@ -22,4 +23,8 @@ pub fn run(path: &str) {
     eprintln!("{} MB", sz / 1024 / 1024);
     eprintln!("{}s elapsed", secs);
     eprintln!("{}MB/s", sz as f64 / secs / 1024 as f64 / 1024 as f64);
+
+    doc.computes().sort_by(|a, b| -> Ordering {
+        return a.cmp_start(b);
+    });
 }

@@ -7,6 +7,7 @@ extern crate clap;
 use clap::{App, Arg, SubCommand};
 
 mod cmd;
+mod interval;
 
 fn main() {
     let matches = App::new("hetero-tools")
