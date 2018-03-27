@@ -7,23 +7,23 @@ use std::cmp::Ordering;
 
 use interval::Interval;
 
-impl Interval for heteroprof::Compute {
-    fn lb(&self) -> f64 {
-        return self.start;
-    }
-    fn ub(&self) -> f64 {
-        return self.lb() + self.dur;
-    }
-}
+// impl Interval for heteroprof::Compute {
+//     fn lb(&self) -> f64 {
+//         return self.start;
+//     }
+//     fn ub(&self) -> f64 {
+//         return self.lb() + self.dur;
+//     }
+// }
 
-impl Interval for heteroprof::Transfer {
-    fn lb(&self) -> f64 {
-        return self.start;
-    }
-    fn ub(&self) -> f64 {
-        return self.lb() + self.dur;
-    }
-}
+// impl Interval for heteroprof::Transfer {
+//     fn lb(&self) -> f64 {
+//         return self.start;
+//     }
+//     fn ub(&self) -> f64 {
+//         return self.lb() + self.dur;
+//     }
+// }
 
 pub fn run(path: &str) {
     let start = SystemTime::now();
@@ -31,8 +31,8 @@ pub fn run(path: &str) {
     let file = fs::File::open(path).unwrap();
     let mut reader = BufReader::new(file);
     let mut doc = heteroprof::decode_document(&mut reader).unwrap();
-    eprintln!("{} computes", doc.computes().len());
-    eprintln!("{} transfers", doc.transfers().len());
+    eprintln!("{} api records", doc.apis().len());
+    eprintln!("{} activity records", doc.activities().len());
 
     // print some info about execution
     let sz = metadata.unwrap().len();
@@ -42,6 +42,10 @@ pub fn run(path: &str) {
     eprintln!("{}s elapsed", secs);
     eprintln!("{}MB/s", sz as f64 / secs / 1024 as f64 / 1024 as f64);
 
+    // build a pdg
+    let pdg = heteroprof::pdg::from_document(doc);
+
+    /*
     // sort computes
     eprintln!("sorting compute intervals...");
     doc.computes_mut().sort_by(|a, b| -> Ordering {
@@ -94,4 +98,5 @@ pub fn run(path: &str) {
         }
     }
     eprintln!("{}", freet / 1e9);
+    */
 }
